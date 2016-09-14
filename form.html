@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>敏感词替换</title>
+
+    <!-- Bootstrap -->
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style type="text/css">
+    	.alert-info{
+    		min-height: 200px;
+    	}
+    	.container{
+    		padding-top: 10px;
+    	}
+    	.jumbotron{
+    		padding-top:10px;
+    		padding-bottom: 10px;
+    	}
+    </style>
+  </head>
+  <body>
+    <div class="container">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="jumbotron">
+  	<h2><b>敏感词替换</b></h2>
+  	  <p>当前词典共收集敏感词${DicTotal}个</p>
+	  <textarea id="content" class="form-control" rows="5" placeholder="请输入要检测的内容"></textarea>
+	  <p></p>
+	<p><a class="btn btn-primary btn-lg" href="#" role="button" id="button">开始检测</a></p>
+	</div>
+	<div class="alert alert-info" role="alert"></div>
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+      $(function(){
+        $("#button").click(function(){
+          $.get("/sensitive", { content: $("#content").val() },function(response){
+          	data = eval("("+response+")")
+            words = data.dic;
+            count = data.count;
+            content = data.content;
+            cost = data.time;
+            html = '<p>命中数量：'+count+'</p><p>命中词语：'+words+'</p><p>替换后文本：'+content+'</p><p>耗时：'+cost+'ms</p>';
+            $(".alert").html(html);
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
